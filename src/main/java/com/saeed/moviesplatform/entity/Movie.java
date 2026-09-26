@@ -1,0 +1,38 @@
+package com.saeed.moviesplatform.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "movies")
+@Getter@Setter
+public class Movie {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
+    private Long id;
+
+    @Column(name = "TITLE", nullable = false)
+    private String title;
+
+    @Lob
+    @Column(name = "DESCRIPTION", nullable = false)
+    private String description;
+
+    @Column(name = "TRAILER")
+    private String trailer;
+
+    @Column(name = "POSTER", nullable = false)
+    private String poster;
+
+    @Column(name = "RELEASE_DATE", nullable = false)
+    private LocalDate releaseDate;
+
+    @Column(name = "DURATION", nullable = false)
+    private Integer duration;
+}
