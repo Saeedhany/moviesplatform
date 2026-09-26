@@ -1,6 +1,7 @@
 package com.saeed.moviesplatform.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @Column(name = "TITLE", nullable = false)
