@@ -5,6 +5,8 @@ import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
 import com.saeed.moviesplatform.entity.Movie;
 import com.saeed.moviesplatform.movie.service.IMovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +38,12 @@ public class MovieController {
 
          return movieService.updateMovie(Long.valueOf(id), updateMovieRequest);
 
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMovie(@PathVariable String id){
+        movieService.deleteMovie(Long.valueOf(id));
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

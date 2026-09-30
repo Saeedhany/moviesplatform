@@ -13,4 +13,6 @@ public interface IMovieService {
     Movie createMovie(CreateOrUpdateMovieRequest createMovieRequest);
 
     Movie updateMovie(Long id,CreateOrUpdateMovieRequest updateMovieRequest);
+
+    void deleteMovie(Long id);
 }
