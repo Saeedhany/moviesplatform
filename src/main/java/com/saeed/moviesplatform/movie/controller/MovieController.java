@@ -27,10 +27,13 @@ public class MovieController {
     }
 
     @PostMapping()
-    public Movie createMovie(@RequestBody CreateOrUpdateMovieRequest request){
+    public ResponseEntity<Movie> createMovie(@RequestBody CreateOrUpdateMovieRequest request){
         
-        return movieService.createMovie(request);
+        Movie movie = movieService.createMovie(request);
 
+       return ResponseEntity
+               .status(HttpStatus.CREATED)
+               .body(movie);
     }
 
     @PutMapping("/{id}")
