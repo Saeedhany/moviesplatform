@@ -1,7 +1,7 @@
 package com.saeed.moviesplatform.movie.service.impl;
 
 import ch.qos.logback.core.joran.util.beans.BeanUtil;
-import com.saeed.moviesplatform.dto.CreateMovieRequest;
+import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
 import com.saeed.moviesplatform.entity.Movie;
 import com.saeed.moviesplatform.movie.service.IMovieService;
 import com.saeed.moviesplatform.repository.MovieRepository;
@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class MovieServiceImpl implements IMovieService {
     }
 
     @Override
-    public Movie createMovie(CreateMovieRequest createMovieRequest) {
+    public Movie createMovie(CreateOrUpdateMovieRequest createMovieRequest) {
         Movie movie = new Movie();
         BeanUtils.copyProperties(createMovieRequest, movie);
 
@@ -31,4 +32,16 @@ public class MovieServiceImpl implements IMovieService {
 
         return savedMovie;
     }
+
+    @Override
+    public Movie updateMovie(Long id, CreateOrUpdateMovieRequest request) {
+
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Movie not found"));
+
+        BeanUtils.copyProperties(request, movie);
+
+        return movieRepository.save(movie);
+    }
+
 }
