@@ -3,6 +3,7 @@ package com.saeed.moviesplatform.movie.service.impl;
 import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
 import com.saeed.moviesplatform.entity.Movie;
+import com.saeed.moviesplatform.exception.exceptions.MovieNotFoundException;
 import com.saeed.moviesplatform.movie.service.IMovieService;
 import com.saeed.moviesplatform.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class MovieServiceImpl implements IMovieService {
     public Movie updateMovie(Long id, CreateOrUpdateMovieRequest request) {
 
         Movie movie = movieRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found with id: " + id));
 
         BeanUtils.copyProperties(request, movie);
 
