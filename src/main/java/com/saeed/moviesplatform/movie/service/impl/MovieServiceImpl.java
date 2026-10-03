@@ -1,23 +1,28 @@
 package com.saeed.moviesplatform.movie.service.impl;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
+import com.saeed.moviesplatform.entity.Genre;
 import com.saeed.moviesplatform.entity.Movie;
+import com.saeed.moviesplatform.exception.exceptions.GenreNotFoundException;
 import com.saeed.moviesplatform.exception.exceptions.MovieNotFoundException;
 import com.saeed.moviesplatform.movie.service.IMovieService;
+import com.saeed.moviesplatform.repository.GenreRepository;
 import com.saeed.moviesplatform.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class MovieServiceImpl implements IMovieService {
 
     private final MovieRepository movieRepository;
+
+    private final GenreRepository genreRepository;
 
     @Override
     public List<Movie> getAllMovies() {
@@ -27,11 +32,8 @@ public class MovieServiceImpl implements IMovieService {
     @Override
     public Movie createMovie(CreateOrUpdateMovieRequest createMovieRequest) {
         Movie movie = new Movie();
-        BeanUtils.copyProperties(createMovieRequest, movie);
 
-        Movie savedMovie = movieRepository.save(movie);
-
-        return savedMovie;
+        return prepareAndSaveMovie(createMovieRequest, movie);
     }
 
     @Override
@@ -40,9 +42,7 @@ public class MovieServiceImpl implements IMovieService {
         Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new MovieNotFoundException("Movie not found with id: " + id));
 
-        BeanUtils.copyProperties(request, movie);
-
-        return movieRepository.save(movie);
+        return prepareAndSaveMovie(request, movie);
     }
 
     @Override
@@ -53,6 +53,27 @@ public class MovieServiceImpl implements IMovieService {
 
         movieRepository.deleteById(id);
 
+    }
+
+
+    private Movie prepareAndSaveMovie(CreateOrUpdateMovieRequest request, Movie movie){
+
+        BeanUtils.copyProperties(request, movie);
+
+        Set<Genre> genres =
+                new HashSet<>(genreRepository.findAllById(request.genreIds()));
+
+        if(genres.size() != request.genreIds().size()){
+            throw new GenreNotFoundException(
+                    "One or more genres were not found"
+            );
+        }
+
+        movie.setGenres(genres);
+
+        Movie savedMovie = movieRepository.save(movie);
+
+        return savedMovie;
     }
 
 }

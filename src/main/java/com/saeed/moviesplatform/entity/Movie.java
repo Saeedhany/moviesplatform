@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "movies")
@@ -37,4 +39,12 @@ public class Movie {
 
     @Column(name = "DURATION", nullable = false)
     private Integer duration;
+
+    @ManyToMany
+    @JoinTable(
+            name = "movie_genre",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<Genre> genres;
 }
