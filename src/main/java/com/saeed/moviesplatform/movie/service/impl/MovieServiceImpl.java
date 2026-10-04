@@ -1,11 +1,14 @@
 package com.saeed.moviesplatform.movie.service.impl;
 
 import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
+import com.saeed.moviesplatform.entity.Actor;
 import com.saeed.moviesplatform.entity.Genre;
 import com.saeed.moviesplatform.entity.Movie;
+import com.saeed.moviesplatform.exception.exceptions.ActorNotFoundException;
 import com.saeed.moviesplatform.exception.exceptions.GenreNotFoundException;
 import com.saeed.moviesplatform.exception.exceptions.MovieNotFoundException;
 import com.saeed.moviesplatform.movie.service.IMovieService;
+import com.saeed.moviesplatform.repository.ActorRepository;
 import com.saeed.moviesplatform.repository.GenreRepository;
 import com.saeed.moviesplatform.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,8 @@ public class MovieServiceImpl implements IMovieService {
     private final MovieRepository movieRepository;
 
     private final GenreRepository genreRepository;
+
+    private final ActorRepository actorRepository;
 
     @Override
     public List<Movie> getAllMovies() {
@@ -69,7 +74,17 @@ public class MovieServiceImpl implements IMovieService {
             );
         }
 
+        Set<Actor> actors =
+                new HashSet<>(actorRepository.findAllById(request.actorIds()));
+
+        if(actors.size() != request.actorIds().size()){
+            throw new ActorNotFoundException(
+                    "One or more actors were not found"
+            );
+        }
+
         movie.setGenres(genres);
+        movie.setActors(actors);
 
         Movie savedMovie = movieRepository.save(movie);
 

@@ -7,6 +7,12 @@ import java.util.Set;
 /**
  * DTO for {@link com.saeed.moviesplatform.entity.Movie}
  */
-public record CreateOrUpdateMovieRequest(String title, String description, String trailer, String poster, LocalDate releaseDate,
-                                         Integer duration, Set<Long> genreIds) {
+public record CreateOrUpdateMovieRequest(String title,
+                                         String description,
+                                         String trailer,
+                                         String poster,
+                                         LocalDate releaseDate,
+                                         Integer duration,
+                                         Set<Long> genreIds,
+                                         Set<Long> actorIds) {
 }

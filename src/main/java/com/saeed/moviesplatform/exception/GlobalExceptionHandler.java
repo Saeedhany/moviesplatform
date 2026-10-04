@@ -2,6 +2,7 @@ package com.saeed.moviesplatform.exception;
 
 
 import com.saeed.moviesplatform.dto.ErrorResponseDto;
+import com.saeed.moviesplatform.exception.exceptions.ActorNotFoundException;
 import com.saeed.moviesplatform.exception.exceptions.GenreNotFoundException;
 import com.saeed.moviesplatform.exception.exceptions.MovieNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(GenreNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleGenreNotFound(GenreNotFoundException exception){
+
+        ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage(), 404);
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(ActorNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleActorNotFound(ActorNotFoundException exception){
 
         ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage(), 404);
 

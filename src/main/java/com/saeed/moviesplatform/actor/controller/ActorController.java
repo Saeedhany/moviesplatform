@@ -1,0 +1,58 @@
+package com.saeed.moviesplatform.actor.controller;
+
+
+import com.saeed.moviesplatform.actor.service.IActorService;
+import com.saeed.moviesplatform.dto.ActorDto;
+import com.saeed.moviesplatform.entity.Actor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/actors")
+public class ActorController {
+
+    private final IActorService actorService;
+
+    @GetMapping
+    public List<Actor> getAllActors(){
+
+       List<Actor> actors =  actorService.getAllActors();
+
+       return actors;
+    }
+
+    @PostMapping
+    public ResponseEntity<Actor> createActor(@RequestBody ActorDto request){
+
+        Actor actor = actorService.createActor(request);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(actor);
+
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Actor> updateActor(@RequestBody ActorDto request,  @PathVariable Long id){
+
+        Actor actor = actorService.updateActor(id , request);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(actor);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity <Void> deleteActor(@PathVariable Long id){
+
+        actorService.deleteActor(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+}
