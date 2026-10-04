@@ -2,6 +2,7 @@ package com.saeed.moviesplatform.movie.controller;
 
 
 import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
+import com.saeed.moviesplatform.dto.MovieDetailsResponse;
 import com.saeed.moviesplatform.entity.Movie;
 import com.saeed.moviesplatform.movie.service.IMovieService;
 import lombok.RequiredArgsConstructor;
@@ -48,5 +49,14 @@ public class MovieController {
         movieService.deleteMovie(Long.valueOf(id));
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MovieDetailsResponse> getMovieDetails(@PathVariable Long id){
+
+        MovieDetailsResponse movieDetails =  movieService.getMovieById(id);
+
+        return ResponseEntity.ok(movieDetails);
+
     }
 }

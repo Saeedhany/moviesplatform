@@ -1,6 +1,9 @@
 package com.saeed.moviesplatform.movie.service.impl;
 
+import com.saeed.moviesplatform.dto.ActorDto;
 import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
+import com.saeed.moviesplatform.dto.GenreDto;
+import com.saeed.moviesplatform.dto.MovieDetailsResponse;
 import com.saeed.moviesplatform.entity.Actor;
 import com.saeed.moviesplatform.entity.Genre;
 import com.saeed.moviesplatform.entity.Movie;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +67,14 @@ public class MovieServiceImpl implements IMovieService {
 
     }
 
+    @Override
+    public MovieDetailsResponse getMovieById(Long id) {
+
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found with id: " + id));
+
+       return transformMovieToDetailsResponse(movie);
+    }
 
     private Movie prepareAndSaveMovie(CreateOrUpdateMovieRequest request, Movie movie){
 
@@ -92,6 +104,33 @@ public class MovieServiceImpl implements IMovieService {
         Movie savedMovie = movieRepository.save(movie);
 
         return savedMovie;
+    }
+
+    private MovieDetailsResponse transformMovieToDetailsResponse(Movie movie){
+
+        Set<GenreDto> genres = movie.getGenres()
+                .stream()
+                .map(genre -> new GenreDto(genre.getName()))
+                .collect(Collectors.toSet());
+
+        Set<ActorDto> actors = movie.getActors()
+                .stream()
+                .map(actor -> new ActorDto(actor.getName(), actor.getPhoto(), actor.getBiography()))
+                .collect(Collectors.toSet());
+
+          MovieDetailsResponse movieDetailsResponse = new MovieDetailsResponse(
+                movie.getId(),
+                movie.getTitle(),
+                movie.getDescription(),
+                movie.getTrailer(),
+                movie.getPoster(),
+                movie.getReleaseDate(),
+                movie.getDuration(),
+                genres,
+                actors
+        );
+
+       return movieDetailsResponse;
     }
 
 }
