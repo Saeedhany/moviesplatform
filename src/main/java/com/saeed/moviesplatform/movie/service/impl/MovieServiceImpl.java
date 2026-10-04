@@ -14,6 +14,7 @@ import com.saeed.moviesplatform.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +35,7 @@ public class MovieServiceImpl implements IMovieService {
         return movieRepository.findAll();
     }
 
+    @Transactional
     @Override
     public Movie createMovie(CreateOrUpdateMovieRequest createMovieRequest) {
         Movie movie = new Movie();
@@ -41,6 +43,7 @@ public class MovieServiceImpl implements IMovieService {
         return prepareAndSaveMovie(createMovieRequest, movie);
     }
 
+    @Transactional
     @Override
     public Movie updateMovie(Long id, CreateOrUpdateMovieRequest request) {
 
