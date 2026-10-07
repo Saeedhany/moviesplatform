@@ -4,6 +4,7 @@ import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
 import com.saeed.moviesplatform.dto.MovieDetailsResponse;
 import com.saeed.moviesplatform.entity.Movie;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IMovieService {
@@ -18,4 +19,6 @@ public interface IMovieService {
     void deleteMovie(Long id);
 
     MovieDetailsResponse getMovieById(Long id);
+
+    public List<Movie> searchMovies(String title, Long genreId, LocalDate dateFrom, LocalDate dateTo);
 }

@@ -14,11 +14,14 @@ import com.saeed.moviesplatform.movie.service.IMovieService;
 import com.saeed.moviesplatform.repository.ActorRepository;
 import com.saeed.moviesplatform.repository.GenreRepository;
 import com.saeed.moviesplatform.repository.MovieRepository;
+import com.saeed.moviesplatform.specification.MovieSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,6 +77,42 @@ public class MovieServiceImpl implements IMovieService {
                 .orElseThrow(() -> new MovieNotFoundException("Movie not found with id: " + id));
 
        return transformMovieToDetailsResponse(movie);
+    }
+
+    @Override
+    public List<Movie> searchMovies(String title , Long genreId, LocalDate dateFrom, LocalDate dateTo) {
+
+        Specification<Movie> specifications = null;
+
+        if (title != null) {
+            specifications = addSpecification(
+                    specifications,
+                    MovieSpecification.hasTitle(title)
+            );
+        }
+
+        if (dateFrom != null) {
+            specifications = addSpecification(
+                    specifications,
+                    MovieSpecification.hasReleaseDateFrom(dateFrom)
+            );
+        }
+        
+        if (genreId != null) {
+            specifications = addSpecification(
+                    specifications,
+                    MovieSpecification.hasGenre(genreId)
+            );
+        }
+
+        if (dateTo != null) {
+            specifications = addSpecification(
+                    specifications,
+                    MovieSpecification.hasReleaseDateTo(dateTo)
+            );
+        }
+
+        return (specifications==null?getAllMovies():movieRepository.findAll(specifications));
     }
 
     private Movie prepareAndSaveMovie(CreateOrUpdateMovieRequest request, Movie movie){
@@ -133,4 +172,14 @@ public class MovieServiceImpl implements IMovieService {
        return movieDetailsResponse;
     }
 
+
+    private Specification<Movie> addSpecification(Specification<Movie> current, Specification<Movie> newSpecification){
+
+        if(current == null){
+            return newSpecification;
+        }
+
+        return current.and(newSpecification);
+
+    }
 }

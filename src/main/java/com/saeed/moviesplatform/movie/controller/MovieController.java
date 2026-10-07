@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,11 +22,6 @@ public class MovieController {
 
     private final IMovieService movieService;
 
-
-    @GetMapping()
-    public List<Movie> getAllMovies(){
-        return movieService.getAllMovies();
-    }
 
     @PostMapping()
     public ResponseEntity<Movie> createMovie(@RequestBody CreateOrUpdateMovieRequest request){
@@ -58,5 +54,11 @@ public class MovieController {
 
         return ResponseEntity.ok(movieDetails);
 
+    }
+
+    @GetMapping
+    public List<Movie> getMovies(@RequestParam(required = false) String title, @RequestParam(required = false) Long genreId,@RequestParam(required = false) LocalDate dateFrom,@RequestParam(required = false) LocalDate dateTo){
+
+        return movieService.searchMovies(title,genreId,dateFrom,dateTo);
     }
 }
