@@ -3,8 +3,12 @@ package com.saeed.moviesplatform.movie.controller;
 
 import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
 import com.saeed.moviesplatform.dto.MovieDetailsResponse;
+import com.saeed.moviesplatform.dto.RatingRequest;
 import com.saeed.moviesplatform.entity.Movie;
+import com.saeed.moviesplatform.entity.Rating;
 import com.saeed.moviesplatform.movie.service.IMovieService;
+import com.saeed.moviesplatform.rating.service.IRatingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,7 @@ import java.util.Optional;
 public class MovieController {
 
     private final IMovieService movieService;
+    private final IRatingService ratingService;
 
 
     @PostMapping()
@@ -60,5 +65,13 @@ public class MovieController {
     public List<Movie> getMovies(@RequestParam(required = false) String title, @RequestParam(required = false) Long genreId,@RequestParam(required = false) LocalDate dateFrom,@RequestParam(required = false) LocalDate dateTo){
 
         return movieService.searchMovies(title,genreId,dateFrom,dateTo);
+    }
+
+    @PostMapping("/{movieId}/rating")
+    public Rating rateMovie(@PathVariable Long movieId,
+                            @Valid @RequestBody RatingRequest ratingRequest, @RequestParam Long userId){
+
+        return ratingService.rateMovie(userId, movieId, ratingRequest.rate());
+
     }
 }

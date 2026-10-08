@@ -2,9 +2,7 @@ package com.saeed.moviesplatform.exception;
 
 
 import com.saeed.moviesplatform.dto.ErrorResponseDto;
-import com.saeed.moviesplatform.exception.exceptions.ActorNotFoundException;
-import com.saeed.moviesplatform.exception.exceptions.GenreNotFoundException;
-import com.saeed.moviesplatform.exception.exceptions.MovieNotFoundException;
+import com.saeed.moviesplatform.exception.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +40,26 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserNotFound(UserNotFoundException exception){
+
+        ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage(), 404);
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> EmailAlreadyExists(EmailAlreadyExistsException exception){
+
+        ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage(), 404);
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
                 .body(errorResponse);
     }
 
