@@ -2,6 +2,8 @@ package com.saeed.moviesplatform.auth.controller;
 
 
 import com.saeed.moviesplatform.auth.service.IAuthService;
+import com.saeed.moviesplatform.dto.LoginRequest;
+import com.saeed.moviesplatform.dto.LoginResponse;
 import com.saeed.moviesplatform.dto.RegisterRequest;
 import com.saeed.moviesplatform.dto.RegisterResponse;
 import jakarta.validation.Valid;
@@ -28,6 +30,13 @@ public class AuthController {
        return ResponseEntity
                .status(HttpStatus.CREATED)
                .body(authService.register(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request){
+
+        return ResponseEntity
+                .ok(authService.login(request));
     }
 
 
