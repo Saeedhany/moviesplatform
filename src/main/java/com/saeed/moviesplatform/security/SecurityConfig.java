@@ -45,13 +45,19 @@ public class SecurityConfig {
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/register"
                         ).permitAll()
-
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/v1/genres/test-auth")
                         .authenticated()
-
+                        .requestMatchers(HttpMethod.GET, "/api/v1/movies/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/movies/**")
                         .hasRole("ADMIN")
-
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/movies/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/movies/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/genres/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/genres/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/genres/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/genres/**")
+                        .hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
 

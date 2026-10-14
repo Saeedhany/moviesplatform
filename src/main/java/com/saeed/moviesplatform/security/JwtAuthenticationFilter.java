@@ -85,10 +85,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
         } catch (JwtException | IllegalArgumentException e) {
+
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-
         filterChain.doFilter(request,response);
     }
 }
