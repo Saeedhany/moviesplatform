@@ -1,7 +1,6 @@
 package com.saeed.moviesplatform.security;
 
 import com.saeed.moviesplatform.BlackListedToken.service.IBlackListedTokenService;
-import com.saeed.moviesplatform.BlackListedToken.service.impl.BlackListedTokenServiceImpl;
 import com.saeed.moviesplatform.entity.PlatformUser;
 import com.saeed.moviesplatform.repository.UserRepository;
 import com.saeed.moviesplatform.security.util.JwtService;
@@ -13,11 +12,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -91,8 +87,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (JwtException | IllegalArgumentException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
-        } catch (Exception e){
-            throw new BadCredentialsException("Invalid Token received!");
         }
 
         filterChain.doFilter(request,response);

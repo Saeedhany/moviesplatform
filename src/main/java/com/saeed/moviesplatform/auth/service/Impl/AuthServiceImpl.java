@@ -1,5 +1,6 @@
 package com.saeed.moviesplatform.auth.service.Impl;
 
+import com.saeed.moviesplatform.BlackListedToken.service.IBlackListedTokenService;
 import com.saeed.moviesplatform.auth.service.IAuthService;
 import com.saeed.moviesplatform.dto.*;
 import com.saeed.moviesplatform.entity.PlatformUser;
@@ -28,6 +29,8 @@ public class AuthServiceImpl implements IAuthService {
     private final AuthenticationManager authenticationManager;
 
     private final JwtService jwtService;
+
+    private final IBlackListedTokenService blackListedTokenService;
 
 
     @Override
@@ -77,5 +80,23 @@ public class AuthServiceImpl implements IAuthService {
         LoginResponse response = new LoginResponse(token, userResponse);
 
         return response;
+    }
+
+
+    @Override
+    public void logout(String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid Authorization header");
+        }
+
+        String token = authHeader.substring(7);
+
+        if(token.isBlank()){
+            throw new IllegalArgumentException("Token must not be empty");
+        }
+
+        blackListedTokenService.blacklistToken(token);
+
     }
 }

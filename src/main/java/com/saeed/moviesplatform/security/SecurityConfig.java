@@ -40,8 +40,18 @@ public class SecurityConfig {
                         )
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/genres/test-auth").authenticated()
-                        .requestMatchers(HttpMethod.POST,"/api/v1/movies/**").hasRole("ADMIN")
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/v1/auth/login",
+                                "/api/v1/auth/register"
+                        ).permitAll()
+
+                        .requestMatchers("/api/v1/genres/test-auth")
+                        .authenticated()
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/movies/**")
+                        .hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 );
 

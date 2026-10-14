@@ -13,4 +13,6 @@ public interface IAuthService {
 
     LoginResponse login(LoginRequest request);
 
+    void logout (String authHeader);
+
 }

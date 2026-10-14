@@ -54,12 +54,24 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponseDto> EmailAlreadyExists(EmailAlreadyExistsException exception){
+    public ResponseEntity<ErrorResponseDto> handleEmailAlreadyExists(EmailAlreadyExistsException exception){
 
-        ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage(), 404);
+        ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage(), 409);
 
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDto> handleIllegalArgument(
+            IllegalArgumentException exception) {
+
+        ErrorResponseDto errorResponse =
+                new ErrorResponseDto(exception.getMessage(), 400);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(errorResponse);
     }
 
