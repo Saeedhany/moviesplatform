@@ -39,27 +39,91 @@ public class SecurityConfig {
                                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
                         )
                 )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                HttpMethod.POST,
-                                "/api/v1/auth/login",
-                                "/api/v1/auth/register"
-                        ).permitAll()
-                        .requestMatchers("/error").permitAll()
-                        .requestMatchers("/api/v1/genres/test-auth")
-                        .authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/movies/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/movies/**")
-                        .hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/movies/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/movies/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/genres/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/genres/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/genres/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/genres/**")
-                        .hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                );
+
+.authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/v1/auth/login",
+                        "/api/v1/auth/register"
+                ).permitAll()
+
+                .requestMatchers("/error").permitAll()
+
+                // Movies: Admin only for write operations
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/v1/movies/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.PUT,
+                        "/api/v1/movies/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.PATCH,
+                        "/api/v1/movies/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.DELETE,
+                        "/api/v1/movies/**"
+                ).hasRole("ADMIN")
+
+                // Genres: Admin only for write operations
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/v1/genres/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.PUT,
+                        "/api/v1/genres/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.PATCH,
+                        "/api/v1/genres/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.DELETE,
+                        "/api/v1/genres/**"
+                ).hasRole("ADMIN")
+
+                // Actors: Admin only for write operations
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/v1/actors/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.PUT,
+                        "/api/v1/actors/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.PATCH,
+                        "/api/v1/actors/**"
+                ).hasRole("ADMIN")
+
+                .requestMatchers(
+                        HttpMethod.DELETE,
+                        "/api/v1/actors/**"
+                ).hasRole("ADMIN")
+
+                // Public read operations
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/v1/movies/**",
+                        "/api/v1/genres/**",
+                        "/api/v1/actors/**"
+                ).permitAll()
+
+                // Authenticated access for everything else
+                .anyRequest().authenticated()
+        );
+
 
         return http.build();
     }
