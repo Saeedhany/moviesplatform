@@ -14,6 +14,7 @@ import com.saeed.moviesplatform.movie.service.IMovieService;
 import com.saeed.moviesplatform.repository.ActorRepository;
 import com.saeed.moviesplatform.repository.GenreRepository;
 import com.saeed.moviesplatform.repository.MovieRepository;
+import com.saeed.moviesplatform.repository.RatingRepository;
 import com.saeed.moviesplatform.specification.MovieSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +37,8 @@ public class MovieServiceImpl implements IMovieService {
     private final GenreRepository genreRepository;
 
     private final ActorRepository actorRepository;
+
+    private final RatingRepository ratingRepository;
 
     @Override
     public List<Movie> getAllMovies() {
@@ -76,7 +79,17 @@ public class MovieServiceImpl implements IMovieService {
         Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new MovieNotFoundException("Movie not found with id: " + id));
 
-       return transformMovieToDetailsResponse(movie);
+        Double averageRating =
+                ratingRepository.findAverageRatingByMovie_Id(id);
+
+        Long ratingCount =
+                ratingRepository.countByMovie_Id(id);
+
+        return transformMovieToDetailsResponse(
+                movie,
+                averageRating,
+                ratingCount
+        );
     }
 
     @Override
@@ -145,7 +158,7 @@ public class MovieServiceImpl implements IMovieService {
         return savedMovie;
     }
 
-    private MovieDetailsResponse transformMovieToDetailsResponse(Movie movie){
+    private MovieDetailsResponse transformMovieToDetailsResponse(Movie movie, Double averageRating, Long ratingCount){
 
         Set<GenreDto> genres = movie.getGenres()
                 .stream()
@@ -166,7 +179,9 @@ public class MovieServiceImpl implements IMovieService {
                 movie.getReleaseDate(),
                 movie.getDuration(),
                 genres,
-                actors
+                actors,
+                averageRating,
+                ratingCount
         );
 
        return movieDetailsResponse;

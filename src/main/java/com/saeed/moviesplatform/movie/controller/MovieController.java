@@ -4,14 +4,17 @@ package com.saeed.moviesplatform.movie.controller;
 import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
 import com.saeed.moviesplatform.dto.MovieDetailsResponse;
 import com.saeed.moviesplatform.dto.RatingRequest;
+import com.saeed.moviesplatform.dto.RatingResponse;
 import com.saeed.moviesplatform.entity.Movie;
 import com.saeed.moviesplatform.entity.Rating;
 import com.saeed.moviesplatform.movie.service.IMovieService;
 import com.saeed.moviesplatform.rating.service.IRatingService;
+import com.saeed.moviesplatform.security.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -68,8 +71,12 @@ public class MovieController {
     }
 
     @PostMapping("/{movieId}/rating")
-    public Rating rateMovie(@PathVariable Long movieId,
-                            @Valid @RequestBody RatingRequest ratingRequest, @RequestParam Long userId){
+    public RatingResponse rateMovie(@PathVariable Long movieId,
+                                    @Valid @RequestBody RatingRequest ratingRequest, Authentication authentication){
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        Long userId = userDetails.getUser().getId();
 
         return ratingService.rateMovie(userId, movieId, ratingRequest.rate());
 

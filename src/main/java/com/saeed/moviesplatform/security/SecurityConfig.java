@@ -49,6 +49,11 @@ public class SecurityConfig {
 
                 .requestMatchers("/error").permitAll()
 
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/v1/movies/*/rating"
+                ).authenticated()
+
                 // Movies: Admin only for write operations
                 .requestMatchers(
                         HttpMethod.POST,

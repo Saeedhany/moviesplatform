@@ -1,6 +1,7 @@
 package com.saeed.moviesplatform.rating.service.impl;
 
 
+import com.saeed.moviesplatform.dto.RatingResponse;
 import com.saeed.moviesplatform.entity.Movie;
 import com.saeed.moviesplatform.entity.Rating;
 import com.saeed.moviesplatform.entity.PlatformUser;
@@ -10,6 +11,7 @@ import com.saeed.moviesplatform.rating.service.IRatingService;
 import com.saeed.moviesplatform.repository.MovieRepository;
 import com.saeed.moviesplatform.repository.RatingRepository;
 import com.saeed.moviesplatform.repository.UserRepository;
+import com.saeed.moviesplatform.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,7 @@ public class RatingServiceImpl implements IRatingService {
     private final UserRepository userRepository;
 
     @Override
-    public Rating rateMovie(Long userId, Long movieId, Integer rate) {
+    public RatingResponse rateMovie(Long userId, Long movieId, Integer rate) {
         Rating rating = new Rating();
 
         Optional<Rating> existingRating =
@@ -38,6 +40,7 @@ public class RatingServiceImpl implements IRatingService {
             PlatformUser user = userRepository.findById(userId)
                     .orElseThrow(() -> new UserNotFoundException("Not Found User with Id: " + userId));
 
+
             rating.setMovie(movie);
             rating.setUser(user);
             rating.setRate(rate);
@@ -50,7 +53,16 @@ public class RatingServiceImpl implements IRatingService {
 
         }
 
-        return ratingRepository.save(rating);
 
+
+         Rating savedRating =  ratingRepository.save(rating);
+
+        return transformToDTO(savedRating);
+    }
+
+
+    private RatingResponse transformToDTO(Rating rating){
+
+        return new RatingResponse(rating.getId(), rating.getMovie().getId(), rating.getUser().getId(), rating.getRate());
     }
 }

@@ -14,5 +14,7 @@ public record MovieDetailsResponse(Long id,
                                    LocalDate releaseDate,
                                    Integer duration,
                                    Set<GenreDto> genres,
-                                   Set<ActorDto> actors)  {
+                                   Set<ActorDto> actors,
+                                   Double averageRating,
+                                   Long ratingCount)  {
 }

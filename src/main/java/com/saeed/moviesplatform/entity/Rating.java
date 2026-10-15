@@ -1,6 +1,8 @@
 package com.saeed.moviesplatform.entity;
 
 
+import com.saeed.moviesplatform.dto.UserResponse;
+import com.saeed.moviesplatform.security.CustomUserDetails;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
