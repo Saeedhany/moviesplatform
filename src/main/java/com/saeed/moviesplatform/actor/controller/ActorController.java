@@ -4,6 +4,7 @@ package com.saeed.moviesplatform.actor.controller;
 import com.saeed.moviesplatform.actor.service.IActorService;
 import com.saeed.moviesplatform.dto.ActorDto;
 import com.saeed.moviesplatform.entity.Actor;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class ActorController {
        return actors;
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping
     public ResponseEntity<Actor> createActor(@RequestBody @Valid ActorDto request){
 
@@ -38,6 +40,7 @@ public class ActorController {
 
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/{id}")
     public ResponseEntity<Actor> updateActor(@RequestBody @Valid ActorDto request,  @PathVariable Long id){
 
@@ -48,6 +51,7 @@ public class ActorController {
                 .body(actor);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{id}")
     public ResponseEntity <Void> deleteActor(@PathVariable Long id){
 

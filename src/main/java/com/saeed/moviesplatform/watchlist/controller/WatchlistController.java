@@ -6,6 +6,7 @@ import com.saeed.moviesplatform.dto.WatchlistResponse;
 import com.saeed.moviesplatform.entity.PlatformUser;
 import com.saeed.moviesplatform.security.CustomUserDetails;
 import com.saeed.moviesplatform.watchlist.service.IWatchlistService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/watchlist")
+@SecurityRequirement(name = "bearerAuth")
 public class WatchlistController {
 
     private final IWatchlistService watchlistService;

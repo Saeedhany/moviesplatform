@@ -57,7 +57,12 @@ public class SecurityConfig {
                         HttpMethod.POST,
                         "/api/v1/movies/*/rating"
                 ).authenticated()
-
+                .requestMatchers(
+                        "/v3/api-docs/**",
+                        "/v3/api-docs.yaml",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                ).permitAll()
                 // Movies: Admin only for write operations
                 .requestMatchers(
                         HttpMethod.POST,

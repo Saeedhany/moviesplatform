@@ -6,6 +6,7 @@ import com.saeed.moviesplatform.dto.LoginRequest;
 import com.saeed.moviesplatform.dto.LoginResponse;
 import com.saeed.moviesplatform.dto.RegisterRequest;
 import com.saeed.moviesplatform.dto.RegisterResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,7 @@ public class AuthController {
                 .ok(authService.login(request));
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(
             @RequestHeader(value = "Authorization", required = false) String authHeader){

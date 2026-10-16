@@ -4,6 +4,7 @@ package com.saeed.moviesplatform.genre.controller;
 import com.saeed.moviesplatform.dto.GenreDto;
 import com.saeed.moviesplatform.entity.Genre;
 import com.saeed.moviesplatform.genre.service.IGenreService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class GenreController {
         return  genreService.getAllGenres();
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping
     public ResponseEntity<Genre> createGenre(@RequestBody @Valid GenreDto request){
 
@@ -36,6 +38,7 @@ public class GenreController {
                .body(genre);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/{id}")
     public ResponseEntity<Genre> updateGenre(@RequestBody @Valid GenreDto request,@PathVariable Long id){
 
@@ -46,6 +49,7 @@ public class GenreController {
                 .body(genre);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGenre(@PathVariable Long id){
         genreService.deleteGenre(id);
