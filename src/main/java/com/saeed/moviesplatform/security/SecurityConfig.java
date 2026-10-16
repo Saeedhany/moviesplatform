@@ -125,6 +125,11 @@ public class SecurityConfig {
                         "/api/v1/actors/**"
                 ).permitAll()
 
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/v1/watchlist/movies/**"
+                ).authenticated()
+        
                 // Authenticated access for everything else
                 .anyRequest().authenticated()
         );

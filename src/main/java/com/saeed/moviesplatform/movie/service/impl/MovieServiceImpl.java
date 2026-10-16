@@ -11,10 +11,7 @@ import com.saeed.moviesplatform.exception.exceptions.ActorNotFoundException;
 import com.saeed.moviesplatform.exception.exceptions.GenreNotFoundException;
 import com.saeed.moviesplatform.exception.exceptions.MovieNotFoundException;
 import com.saeed.moviesplatform.movie.service.IMovieService;
-import com.saeed.moviesplatform.repository.ActorRepository;
-import com.saeed.moviesplatform.repository.GenreRepository;
-import com.saeed.moviesplatform.repository.MovieRepository;
-import com.saeed.moviesplatform.repository.RatingRepository;
+import com.saeed.moviesplatform.repository.*;
 import com.saeed.moviesplatform.specification.MovieSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -40,6 +37,8 @@ public class MovieServiceImpl implements IMovieService {
 
     private final RatingRepository ratingRepository;
 
+    private final WatchlistRepository watchlistRepository;
+
     @Override
     public List<Movie> getAllMovies() {
         return movieRepository.findAll();
@@ -63,11 +62,14 @@ public class MovieServiceImpl implements IMovieService {
         return prepareAndSaveMovie(request, movie);
     }
 
+    @Transactional
     @Override
     public void deleteMovie(Long id) {
 
         movieRepository.findById(id)
                 .orElseThrow(() -> new MovieNotFoundException("Movie not found with id: " + id));
+
+        watchlistRepository.deleteAllByMovie_Id(id);
 
         movieRepository.deleteById(id);
 

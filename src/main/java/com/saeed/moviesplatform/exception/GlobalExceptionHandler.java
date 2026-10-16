@@ -75,4 +75,14 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
+    @ExceptionHandler(MovieAlreadyInWatchlistException.class)
+    public ResponseEntity<ErrorResponseDto> handleMovieAlreadyExists(MovieAlreadyInWatchlistException exception){
+
+        ErrorResponseDto errorResponse = new ErrorResponseDto(exception.getMessage(), 409);
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(errorResponse);
+    }
+
 }
