@@ -54,10 +54,7 @@ public class GenreController {
                 .build();
     }
 
-    @GetMapping("/test-auth")
-    public String testAuth() {
-        return "Authenticated successfully";
-    }
+   
 
 
 
