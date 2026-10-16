@@ -15,6 +15,8 @@ import com.saeed.moviesplatform.repository.*;
 import com.saeed.moviesplatform.specification.MovieSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,7 +97,7 @@ public class MovieServiceImpl implements IMovieService {
     }
 
     @Override
-    public List<Movie> searchMovies(String title , Long genreId, LocalDate dateFrom, LocalDate dateTo,  Double minRating) {
+    public Page<Movie> searchMovies(String title , Long genreId, LocalDate dateFrom, LocalDate dateTo, Double minRating, Pageable pageable) {
 
         Specification<Movie> specifications = null;
 
@@ -134,7 +136,11 @@ public class MovieServiceImpl implements IMovieService {
             );
         }
 
-        return (specifications==null?getAllMovies():movieRepository.findAll(specifications));
+        if (specifications == null) {
+            return movieRepository.findAll(pageable);
+        }
+
+        return movieRepository.findAll(specifications, pageable);
     }
 
     private Movie prepareAndSaveMovie(CreateOrUpdateMovieRequest request, Movie movie){

@@ -12,6 +12,8 @@ import com.saeed.moviesplatform.rating.service.IRatingService;
 import com.saeed.moviesplatform.security.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -65,9 +67,11 @@ public class MovieController {
     }
 
     @GetMapping
-    public List<Movie> getMovies(@RequestParam(required = false) String title, @RequestParam(required = false) Long genreId,@RequestParam(required = false) LocalDate dateFrom,@RequestParam(required = false) LocalDate dateTo, @RequestParam(required = false) Double minRating){
+    public Page<Movie> getMovies(@RequestParam(required = false) String title, @RequestParam(required = false) Long genreId, @RequestParam(required = false) LocalDate dateFrom,
+                                 @RequestParam(required = false) LocalDate dateTo, @RequestParam(required = false) Double minRating,
+                                 Pageable pageable){
 
-        return movieService.searchMovies(title,genreId,dateFrom,dateTo, minRating);
+        return movieService.searchMovies(title,genreId,dateFrom,dateTo, minRating, pageable);
     }
 
     @PostMapping("/{movieId}/rating")

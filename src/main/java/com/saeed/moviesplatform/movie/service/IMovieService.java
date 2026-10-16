@@ -3,6 +3,8 @@ package com.saeed.moviesplatform.movie.service;
 import com.saeed.moviesplatform.dto.CreateOrUpdateMovieRequest;
 import com.saeed.moviesplatform.dto.MovieDetailsResponse;
 import com.saeed.moviesplatform.entity.Movie;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,5 +22,5 @@ public interface IMovieService {
 
     MovieDetailsResponse getMovieById(Long id);
 
-    public List<Movie> searchMovies(String title, Long genreId, LocalDate dateFrom, LocalDate dateTo, Double minRating);
+    public Page<Movie> searchMovies(String title, Long genreId, LocalDate dateFrom, LocalDate dateTo, Double minRating, Pageable pageable);
 }
