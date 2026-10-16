@@ -95,7 +95,7 @@ public class MovieServiceImpl implements IMovieService {
     }
 
     @Override
-    public List<Movie> searchMovies(String title , Long genreId, LocalDate dateFrom, LocalDate dateTo) {
+    public List<Movie> searchMovies(String title , Long genreId, LocalDate dateFrom, LocalDate dateTo,  Double minRating) {
 
         Specification<Movie> specifications = null;
 
@@ -124,6 +124,13 @@ public class MovieServiceImpl implements IMovieService {
             specifications = addSpecification(
                     specifications,
                     MovieSpecification.hasReleaseDateTo(dateTo)
+            );
+        }
+
+        if (minRating != null) {
+            specifications = addSpecification(
+                    specifications,
+                    MovieSpecification.hasMinimumRating(minRating)
             );
         }
 

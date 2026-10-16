@@ -20,5 +20,5 @@ public interface IMovieService {
 
     MovieDetailsResponse getMovieById(Long id);
 
-    public List<Movie> searchMovies(String title, Long genreId, LocalDate dateFrom, LocalDate dateTo);
+    public List<Movie> searchMovies(String title, Long genreId, LocalDate dateFrom, LocalDate dateTo, Double minRating);
 }

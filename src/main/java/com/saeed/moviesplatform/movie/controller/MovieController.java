@@ -65,9 +65,9 @@ public class MovieController {
     }
 
     @GetMapping
-    public List<Movie> getMovies(@RequestParam(required = false) String title, @RequestParam(required = false) Long genreId,@RequestParam(required = false) LocalDate dateFrom,@RequestParam(required = false) LocalDate dateTo){
+    public List<Movie> getMovies(@RequestParam(required = false) String title, @RequestParam(required = false) Long genreId,@RequestParam(required = false) LocalDate dateFrom,@RequestParam(required = false) LocalDate dateTo, @RequestParam(required = false) Double minRating){
 
-        return movieService.searchMovies(title,genreId,dateFrom,dateTo);
+        return movieService.searchMovies(title,genreId,dateFrom,dateTo, minRating);
     }
 
     @PostMapping("/{movieId}/rating")
