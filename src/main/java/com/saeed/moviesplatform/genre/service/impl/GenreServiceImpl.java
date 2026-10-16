@@ -6,9 +6,11 @@ import com.saeed.moviesplatform.entity.Genre;
 import com.saeed.moviesplatform.exception.exceptions.GenreNotFoundException;
 import com.saeed.moviesplatform.genre.service.IGenreService;
 import com.saeed.moviesplatform.repository.GenreRepository;
+import com.saeed.moviesplatform.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +21,8 @@ import java.util.Set;
 public class GenreServiceImpl implements IGenreService {
 
     private final GenreRepository genreRepository;
+
+    private final MovieRepository movieRepository;
 
     @Override
     public Genre createGenre(String name) {
@@ -37,11 +41,14 @@ public class GenreServiceImpl implements IGenreService {
         return genres;
     }
 
+    @Transactional
     @Override
     public void deleteGenre(Long id) {
 
         genreRepository.findById(id).
                 orElseThrow(() -> new GenreNotFoundException("Genre Not Found"));
+
+        movieRepository.deleteGenreRelationships(id);
 
         genreRepository.deleteById(id);
     }

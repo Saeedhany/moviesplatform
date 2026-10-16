@@ -27,4 +27,6 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     List<Object[]> findAverageRatingsByMovieIds(
             @Param("movieIds") List<Long> movieIds
     );
+
+    void deleteAllByMovie_Id(Long movieId);
 }

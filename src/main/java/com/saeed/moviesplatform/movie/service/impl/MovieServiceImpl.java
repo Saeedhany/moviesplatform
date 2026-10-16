@@ -73,6 +73,8 @@ public class MovieServiceImpl implements IMovieService {
 
         watchlistRepository.deleteAllByMovie_Id(id);
 
+        ratingRepository.deleteAllByMovie_Id(id);
+
         movieRepository.deleteById(id);
 
     }

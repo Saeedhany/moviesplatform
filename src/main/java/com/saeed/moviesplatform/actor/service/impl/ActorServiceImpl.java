@@ -5,9 +5,11 @@ import com.saeed.moviesplatform.dto.ActorDto;
 import com.saeed.moviesplatform.entity.Actor;
 import com.saeed.moviesplatform.exception.exceptions.ActorNotFoundException;
 import com.saeed.moviesplatform.repository.ActorRepository;
+import com.saeed.moviesplatform.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
 public class ActorServiceImpl implements IActorService {
 
     private final ActorRepository actorRepository;
+    private final MovieRepository movieRepository;
 
     @Override
     public Actor createActor(ActorDto request) {
@@ -53,6 +56,7 @@ public class ActorServiceImpl implements IActorService {
         return savedActor;
     }
 
+    @Transactional
     @Override
     public void deleteActor(Long id) {
 
@@ -61,6 +65,8 @@ public class ActorServiceImpl implements IActorService {
                         new ActorNotFoundException(
                                 "Actor not found with id: " + id
                         ));
+
+        movieRepository.deleteActorRelationships(id);
 
         actorRepository.deleteById(id);
 
