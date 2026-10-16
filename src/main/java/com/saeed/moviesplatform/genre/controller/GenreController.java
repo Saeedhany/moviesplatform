@@ -4,6 +4,7 @@ package com.saeed.moviesplatform.genre.controller;
 import com.saeed.moviesplatform.dto.GenreDto;
 import com.saeed.moviesplatform.entity.Genre;
 import com.saeed.moviesplatform.genre.service.IGenreService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class GenreController {
     }
 
     @PostMapping
-    public ResponseEntity<Genre> createGenre(@RequestBody GenreDto request){
+    public ResponseEntity<Genre> createGenre(@RequestBody @Valid GenreDto request){
 
       Genre genre = genreService.createGenre(request.name());
 
@@ -36,7 +37,7 @@ public class GenreController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Genre> updateGenre(@RequestBody GenreDto request,@PathVariable Long id){
+    public ResponseEntity<Genre> updateGenre(@RequestBody @Valid GenreDto request,@PathVariable Long id){
 
         Genre genre = genreService.updateGenre(request,id);
 
@@ -54,7 +55,7 @@ public class GenreController {
                 .build();
     }
 
-   
+
 
 
 

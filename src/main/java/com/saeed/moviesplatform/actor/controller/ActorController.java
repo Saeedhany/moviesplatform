@@ -4,6 +4,7 @@ package com.saeed.moviesplatform.actor.controller;
 import com.saeed.moviesplatform.actor.service.IActorService;
 import com.saeed.moviesplatform.dto.ActorDto;
 import com.saeed.moviesplatform.entity.Actor;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class ActorController {
     }
 
     @PostMapping
-    public ResponseEntity<Actor> createActor(@RequestBody ActorDto request){
+    public ResponseEntity<Actor> createActor(@RequestBody @Valid ActorDto request){
 
         Actor actor = actorService.createActor(request);
 
@@ -38,7 +39,7 @@ public class ActorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Actor> updateActor(@RequestBody ActorDto request,  @PathVariable Long id){
+    public ResponseEntity<Actor> updateActor(@RequestBody @Valid ActorDto request,  @PathVariable Long id){
 
         Actor actor = actorService.updateActor(id , request);
 

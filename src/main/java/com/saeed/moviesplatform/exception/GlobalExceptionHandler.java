@@ -6,6 +6,7 @@ import com.saeed.moviesplatform.exception.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -85,4 +86,16 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDto> handleMethodArgNotValid(
+            MethodArgumentNotValidException exception) {
+
+        ErrorResponseDto errorResponse =
+                new ErrorResponseDto(exception.getBindingResult().getFieldErrors().getFirst().getDefaultMessage(), 400);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
 }

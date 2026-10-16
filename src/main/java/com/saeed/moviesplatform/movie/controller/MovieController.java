@@ -34,7 +34,7 @@ public class MovieController {
 
 
     @PostMapping()
-    public ResponseEntity<Movie> createMovie(@RequestBody CreateOrUpdateMovieRequest request){
+    public ResponseEntity<Movie> createMovie(@RequestBody @Valid CreateOrUpdateMovieRequest request){
         
         Movie movie = movieService.createMovie(request);
 
@@ -44,7 +44,7 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public Movie updateMovie(@PathVariable String id, @RequestBody CreateOrUpdateMovieRequest updateMovieRequest){
+    public Movie updateMovie(@PathVariable String id, @RequestBody @Valid CreateOrUpdateMovieRequest updateMovieRequest){
 
          return movieService.updateMovie(Long.valueOf(id), updateMovieRequest);
 
